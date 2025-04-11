@@ -13,7 +13,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout the code from the Git repository
-                git 'https://github.com/harishvaka/demo.git'
+                git 'https://github.com/Sasikiran2215/demo.git'
             }
         }
 
