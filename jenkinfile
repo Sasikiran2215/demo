@@ -9,6 +9,7 @@ pipeline {
         BUILD_DIR = 'build'
     }
 
+
     stages {
         stage('Checkout') {
             steps {
