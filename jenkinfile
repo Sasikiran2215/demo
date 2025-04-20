@@ -1,4 +1,4 @@
-pipeline {
+/*pipeline {
     agent {
         label 'slave 1'
     }
@@ -53,4 +53,61 @@ pipeline {
         }
     }
 }
+*/
+pipeline {
+    agent {
+        label 'slave-1'
+    }
 
+    environment {
+        APP_NAME = 'my-app'
+        BUILD_DIR = 'build'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    docker.image('maven:3.9-eclipse-temurin-17').inside {
+                        // Checkout code inside the container
+                        git 'https://github.com/Sasikiran2215/demo.git'
+
+                    }
+                }
+            }
+        }
+        stage('test') {
+            steps {
+                script {
+                    docker.image('maven:3.9-eclipse-temurin-17').inside{
+                        // Run unit tests
+                        echo "Running unit tests"
+                        sh 'mvn test'
+
+                    }
+                }
+            }
+        }
+        stage('Build & Install') {
+            steps {
+                script {
+                    docker.image('maven:3.9-eclipse-temurin-17').inside{
+                         // Build the application
+                        echo "Building the application"
+                        sh 'mvn clean install'
+
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Please check the logs.'
+        }
+    }
+}
